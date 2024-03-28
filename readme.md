@@ -1,4 +1,4 @@
-# splitmesh tool
+# splitmesh
 
 Command line tool to separate tallies into individual files for large MCNP
 meshtal outputs that contain multiple tallies.
