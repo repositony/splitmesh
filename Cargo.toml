@@ -1,0 +1,25 @@
+[package]
+authors      = ["Tony <repositony@outlook.com>"]
+description  = "Command line tool to split meshtal tallies into individual files"
+edition      = "2021"
+keywords     = ["mcnp", "mesh", "meshtal"]
+license      = "GPL-3.0 license"
+name         = "splitmesh"
+readme       = "readme.md"
+repository   = "https://github.com/repositony/splitmesh"
+rust-version = "1.77"
+version      = "1.0.0"
+
+[dependencies]
+anyhow    = "1.0"
+clap      = { version = "4.2", features = ["derive", "wrap_help"] }
+log       = "0.4"
+nom       = "7.1"
+stderrlog = "0.6"
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[[bin]]
+doc  = false
+name = "splitmesh"

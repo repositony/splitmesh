@@ -1,0 +1,8 @@
+debug/
+target/
+release/
+Cargo.lock
+**/*.rs.bk
+*.pdb
+*.vscode
+tmp_*
