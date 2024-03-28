@@ -3,8 +3,24 @@
 Command line tool to separate tallies into individual files for large MCNP
 meshtal outputs that contain multiple tallies.
 
-```text
+```bash
+Split the tallies of a meshtal into individual files
+
 Usage: splitmesh <path> [options]
+
+Arguments:
+  <path>  Path to input meshtal file
+
+Options:
+  -v, --verbose...  Verbose logging (-v, -vv)
+  -q, --quiet       Supress all log output (overrules --verbose)
+  -h, --help        Print help (see more with '--help')
+
+Split options:
+  -t, --tallies <id>...  List of tallies to extract
+  -o, --output <name>    Prefix for output files [default: fmesh]
+
+Note: --help shows more information and examples
 ```
 
 ## Description

@@ -56,7 +56,7 @@ pub struct Cli {
     /// number as `<output>_<id>.msht`.
     #[arg(help_heading("Split options"))]
     #[arg(short, long)]
-    #[arg(value_name = "path")]
+    #[arg(value_name = "name")]
     #[arg(default_value = "fmesh")]
     pub output: String,
 
