@@ -1,11 +1,9 @@
-# splitmesh
+# Meshtal file splitter (`splitmesh`)
 
 Command line tool to separate tallies into individual files for large MCNP
 meshtal outputs that contain multiple tallies.
 
 ```bash
-Split the tallies of a meshtal into individual files
-
 Usage: splitmesh <path> [options]
 
 Arguments:
@@ -23,16 +21,51 @@ Split options:
 Note: --help shows more information and examples
 ```
 
-## Description
+Help is printed with the `-h` flag, and `--help` will show examples, default
+values, examples, and any important behaviour.
+
+## Install
+
+Direct from github:
+
+```shell
+cargo install --git https://github.com/repositony/splitmesh.git
+```
+
+All executables are under `~/.cargo/bin/`, which should already be in your path
+after installing Rust.
+
+<details>
+  <summary>Click here if you have never used Rust</summary><br />
+
+If you have never used the Rust programming language, the toolchain is easily
+installed from the [official website](https://www.rust-lang.org/tools/install)
+
+### Unix (Linux/MacOS)
+
+Run the following to download and run `rustup-init.sh`, which will install 
+the Rust toolchain for your platform.
+
+```shell
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+This should have added `source $HOME/.cargo/env` to the bash profile, so update
+your environment with `source ~/.bashrc`.
+
+### Windows
+
+On Windows, download and run `rustup-init.exe` from the [official installs](https://www.rust-lang.org/tools/install).
+
+</details>
+
+## Overview
 
 Splits up all meshes found in a meshtal file into their individual
 files.
 
 This is very useful for processing large meshtal files with multiple
 tallies, or for just reducing file sizes to a minimum for post-processing.
-
-Help is printed with the `-h` flag, and `--help` will show examples, default
-values, examples, and any important behaviour.
 
 By default, every tally found in the file is splt into individual files.
 
@@ -56,28 +89,4 @@ The name of the output files is appended with the tally number as
 splitmesh /path/to/file.msht --output mymesh
 ```
 
-## Install
 
-Direct from github:
-
-```shell
-cargo install --git https://github.com/repositony/splitmesh.git
-```
-
-All executables are under `~/.cargo/bin/`, which should already be in your path
-after installing Rust.
-
-<details>
-  <summary>Click here if you have never used Rust</summary>
-
-If you have never used the Rust programming language, the toolchain is easily
-installed from the [official website](https://www.rust-lang.org/tools/install)
-
-```shell
-curl https://sh.rustup.rs -sSf | sh
-```
-
-This should have added `source $HOME/.cargo/env` to the bash profile, so update
-your environment with `source ~/.bashrc`.
-
-</details>
