@@ -1,20 +1,20 @@
 [package]
 authors      = ["Tony <repositony@outlook.com>"]
-description  = "Command line tool to split meshtal tallies into individual files"
+description  = "Command line tool to split hdf5 runtapes"
 edition      = "2021"
-keywords     = ["mcnp", "mesh", "meshtal"]
+keywords     = ["hdf5", "mcnp", "mesh"]
 license      = "GPL-3.0 license"
-name         = "splitmesh"
+name         = "splithdf5"
 readme       = "readme.md"
 repository   = "https://github.com/repositony/splitmesh"
 rust-version = "1.79"
 version      = "1.0.1"
 
 [dependencies]
-anyhow    = "1.0.94"
-clap      = { version = "4.5.23", features = ["derive", "wrap_help"] }
-log       = "0.4.22"
-nom       = "7.1.3"
+anyhow    = "1.0.95"
+clap      = { version = "4.5.28", features = ["derive", "wrap_help"] }
+hdf5      = "0.8.1"
+log       = "0.4.25"
 stderrlog = "0.6.0"
 
 [lints.rust]
@@ -22,4 +22,4 @@ unsafe_code = "forbid"
 
 [[bin]]
 doc  = false
-name = "splitmesh"
+name = "splithdf5"

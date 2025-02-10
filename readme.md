@@ -24,12 +24,15 @@ Note: --help shows more information and examples
 Help is printed with the `-h` flag, and `--help` will show examples, default
 values, examples, and any important behaviour.
 
+Warning: You mush have the HDF5 C library installed. This may be checked using
+`$ h5cc -showconfig`
+
 ## Install
 
 Direct from github:
 
 ```shell
-cargo install --git https://github.com/repositony/splitmesh.git
+cargo install --git https://github.com/repositony/splithdf5.git
 ```
 
 All executables are under `~/.cargo/bin/`, which should already be in your path
@@ -43,7 +46,7 @@ installed from the [official website](https://www.rust-lang.org/tools/install)
 
 ### Unix (Linux/MacOS)
 
-Run the following to download and run `rustup-init.sh`, which will install 
+Run the following to download and run `rustup-init.sh`, which will install
 the Rust toolchain for your platform.
 
 ```shell
@@ -88,5 +91,3 @@ The name of the output files is appended with the tally number as
 # Change output file names to "mymesh_<id>.msht"
 splitmesh /path/to/file.msht --output mymesh
 ```
-
-

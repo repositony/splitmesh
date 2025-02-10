@@ -3,6 +3,12 @@ use clap::builder::styling::{AnsiColor, Effects};
 use clap::builder::Styles;
 use clap::{arg, Parser};
 
+// standard lib
+use std::str::FromStr;
+
+// xternal
+use anyhow::Result;
+
 /// Split the tallies of a meshtal into individual files
 ///
 /// Files are simply split on lines starting with a "Mesh Tally Number" tag.
@@ -57,7 +63,7 @@ pub struct Cli {
     #[arg(help_heading("Split options"))]
     #[arg(short, long)]
     #[arg(value_name = "name")]
-    #[arg(default_value = "fmesh")]
+    #[arg(default_value = "results")]
     pub output: String,
 
     // * Flags
@@ -82,4 +88,18 @@ fn custom_style() -> Styles {
         .usage(AnsiColor::Cyan.on_default() | Effects::BOLD | Effects::UNDERLINE)
         .literal(AnsiColor::Blue.on_default() | Effects::BOLD)
         .placeholder(AnsiColor::Magenta.on_default())
+}
+
+/// Sets up logging at runtime to allow for multiple verbosity levels
+pub fn init_logging(cli: &Cli) -> Result<()> {
+    let show_level = cli.verbose > 0;
+
+    Ok(stderrlog::new()
+        .module("splithdf5")
+        .quiet(cli.quiet)
+        .verbosity(cli.verbose as usize + 2)
+        .show_level(show_level)
+        .color(stderrlog::ColorChoice::Auto)
+        .timestamp(stderrlog::Timestamp::Off)
+        .init()?)
 }
