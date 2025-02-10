@@ -25,6 +25,31 @@ fn main() -> Result<()> {
     // Open the large HDF5 file in read-only mode
     let input_file = File::open("large_input.h5")?;
 
+    // group      /results
+    // group      /results/mesh_tally
+    // group      /results/mesh_tally/mesh_tally_804
+    // group      /results/mesh_tally/mesh_tally_814
+    // group      /results/mesh_tally/mesh_tally_824
+    // group      /results/mesh_tally/mesh_tally_834
+    // group      /results/mesh_tally/mesh_tally_844
+    // group      /results/mesh_tally/mesh_tally_854
+
+    // get the tallys from the cli, either all or a subset of numbers.
+    // if all, easy, do them
+    // if a set
+
+    // Access the "results/mesh_tally" group
+    let mesh_tally_group = file.group("/results/mesh_tally")?;
+
+    for member in mesh_tally_group.member_names()? {
+        if let Some(number) = name.strip_prefix("mesh_tally_") {
+            if let Ok(value) = number.parse::<u32>() {
+                // * then if value in cli values
+                println!("Found fmesh {}, extracting", value);
+            }
+        }
+    }
+
     // Access "group_b"
     let group_b = input_file.group("group_b")?;
 
