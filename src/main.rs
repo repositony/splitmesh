@@ -3,8 +3,11 @@
 
 // standard libraries
 use std::format as f;
-use std::fs::File;
+// use std::fs::File;
 use std::io::{BufRead, BufReader, BufWriter, Write};
+
+// use hdf5::filters::blosc_set_nthreads;
+use hdf5::{dataset, Dataset, File, Group, H5Type};
 
 // external crates
 use anyhow::{anyhow, Result};
@@ -23,7 +26,7 @@ fn main() -> Result<()> {
     cli::init_logging(&cli)?;
 
     // Open the large HDF5 file in read-only mode
-    let input_file = File::open("large_input.h5")?;
+    let file = File::open("../../ntools/crates/mesh/data/meshes/fmesh_8xx.r.h5")?;
 
     // group      /results
     // group      /results/mesh_tally
@@ -38,49 +41,99 @@ fn main() -> Result<()> {
     // if all, easy, do them
     // if a set
 
-    // Access the "results/mesh_tally" group
-    let mesh_tally_group = file.group("/results/mesh_tally")?;
+    dbg!(&cli.tallies);
 
-    for member in mesh_tally_group.member_names()? {
-        if let Some(number) = name.strip_prefix("mesh_tally_") {
-            if let Ok(value) = number.parse::<u32>() {
-                // * then if value in cli values
-                println!("Found fmesh {}, extracting", value);
-            }
-        }
-    }
+    let src_group = file.group("/results/mesh_tally/mesh_tally_814")?; // Change "target_group" to the group you want to copy
 
-    // Access "group_b"
-    let group_b = input_file.group("group_b")?;
+    // let mesh_tally_group = file.group("/results/mesh_tally")?;
 
-    // Create a new HDF5 file to store only "group_b"
-    let output_file = File::create("output.h5")?;
-    let new_group_b = output_file.create_group("group_b")?;
+    // let _ = fs::remove_file("destination.h5"); // Remove if exists
+    // let dest_file = File::create("destination.h5")?;
+    // let dest_group = dest_file.create_group("target_group")?;
 
-    // Get list of datasets inside "group_b"
-    let datasets = group_b.member_names()?;
+    // copy_group(&src_group, &dest_group)?;
 
-    // Initialize progress bar
-    let pb = ProgressBar::new(datasets.len() as u64);
-    pb.set_style(
-        ProgressStyle::default_bar()
-            .template(
-                "{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} copied",
-            )
-            .unwrap()
-            .progress_chars("#>-"),
-    );
+    // // Access the "results/mesh_tally" group
+    // let mesh_tally_group = file.group("/results/mesh_tally")?;
+    // println!("group = {:?}", mesh_tally_group);
 
-    // Copy datasets with progress tracking
-    for dataset_name in datasets {
-        let src_dataset = group_b.dataset(&dataset_name)?;
-        let dst_dataset = src_dataset.copy(&new_group_b, &dataset_name)?;
+    // // for name in mesh_tally_group.member_names()? {
+    // for name in mesh_tally_group.member_names()? {
+    //     // let name = group.name();
 
-        pb.inc(1); // Update progress bar
-    }
+    //     println!("name = {name}");
+    //     if let Some(number) = name.strip_prefix("mesh_tally_") {
+    //         println!("number = {number}");
+    //         if let Ok(tally_id) = number.parse::<u32>() {
+    //             println!("Found fmesh {}, extracting", tally_id);
 
-    pb.finish_with_message("Copy complete!");
-    println!("Successfully copied 'group_b' to output.h5");
+    //             // * then if value in cli values
+    //             if cli.tallies.is_empty() || cli.tallies.contains(&tally_id) {
+    //                 println!(" - Extracting fmesh {tally_id}");
+
+    //                 let output_file = File::create(format!("fmesh_{tally_id}.h5"))?;
+
+    //                 let group_name = format!("/results/mesh_tally/{name}");
+    //                 let new_group = output_file.create_group(&group_name)?;
+
+    //                 let src_group = mesh_tally_group.group(&name)?;
+
+    //                 for dataset_name in src_group.member_names()? {
+    //                     let src_dataset = src_group.dataset(&dataset_name)?;
+
+    //                     // let builder = new_group
+    //                     //     .new_dataset_builder().external(name, offset, size)
+    //                     //     .with_data(src_dataset)
+    //                     //     .create("test")?;
+    //                 }
+
+    //                 // let dataset = group.datasets()?;
+    //                 // builder.with_data(dataset[0]).create("test")?;
+
+    //                 // output_file
+
+    //                 // for dataset_name in group.member_names()? {
+    //                 //     let src_dataset = group.dataset(&dataset_name)?;
+    //                 //     src_dataset.copy(&new_group, &dataset_name)?;
+    //                 // }
+    //             } else {
+    //                 println!(" - Skipping fmesh {tally_id}");
+    //             }
+    //         }
+    //     }
+    // }
+
+    // // Access "group_b"
+    // let group_b = input_file.group("group_b")?;
+
+    // // Create a new HDF5 file to store only "group_b"
+    // let output_file = File::create("output.h5")?;
+    // let new_group_b = output_file.create_group("group_b")?;
+
+    // // Get list of datasets inside "group_b"
+    // let datasets = group_b.member_names()?;
+
+    // // Initialize progress bar
+    // let pb = ProgressBar::new(datasets.len() as u64);
+    // pb.set_style(
+    //     ProgressStyle::default_bar()
+    //         .template(
+    //             "{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} copied",
+    //         )
+    //         .unwrap()
+    //         .progress_chars("#>-"),
+    // );
+
+    // // Copy datasets with progress tracking
+    // for dataset_name in datasets {
+    //     let src_dataset = group_b.dataset(&dataset_name)?;
+    //     let dst_dataset = src_dataset.copy(&new_group_b, &dataset_name)?;
+
+    //     pb.inc(1); // Update progress bar
+    // }
+
+    // pb.finish_with_message("Copy complete!");
+    // println!("Successfully copied 'group_b' to output.h5");
 
     // info!("Splitting \"{}\"", cli.path);
 
