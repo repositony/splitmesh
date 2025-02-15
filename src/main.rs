@@ -7,7 +7,7 @@ use std::format as f;
 use std::io::{BufRead, BufReader, BufWriter, Write};
 
 // use hdf5::filters::blosc_set_nthreads;
-use hdf5::{dataset, Dataset, File, Group, H5Type};
+use hdf5::{dataset, Dataset, DatasetBuilderData, File, Group, H5Type};
 
 // external crates
 use anyhow::{anyhow, Result};
@@ -43,65 +43,84 @@ fn main() -> Result<()> {
 
     dbg!(&cli.tallies);
 
-    let src_group = file.group("/results/mesh_tally/mesh_tally_814")?; // Change "target_group" to the group you want to copy
+    // let src_group = file.group("/results/mesh_tally/mesh_tally_814")?; // Change "target_group" to the group you want to copy
 
-    // let mesh_tally_group = file.group("/results/mesh_tally")?;
+    // // let mesh_tally_group = file.group("/results/mesh_tally")?;
 
-    // let _ = fs::remove_file("destination.h5"); // Remove if exists
-    // let dest_file = File::create("destination.h5")?;
-    // let dest_group = dest_file.create_group("target_group")?;
+    // // let _ = fs::remove_file("destination.h5"); // Remove if exists
+    // // let dest_file = File::create("destination.h5")?;
+    // // let dest_group = dest_file.create_group("target_group")?;
 
-    // copy_group(&src_group, &dest_group)?;
+    // // copy_group(&src_group, &dest_group)?;
 
     // // Access the "results/mesh_tally" group
-    // let mesh_tally_group = file.group("/results/mesh_tally")?;
-    // println!("group = {:?}", mesh_tally_group);
+    let mesh_tally_group = file.group("/results/mesh_tally")?;
+    println!("group = {:?}", mesh_tally_group);
 
-    // // for name in mesh_tally_group.member_names()? {
     // for name in mesh_tally_group.member_names()? {
-    //     // let name = group.name();
+    for name in mesh_tally_group.member_names()? {
+        // let name = group.name();
 
-    //     println!("name = {name}");
-    //     if let Some(number) = name.strip_prefix("mesh_tally_") {
-    //         println!("number = {number}");
-    //         if let Ok(tally_id) = number.parse::<u32>() {
-    //             println!("Found fmesh {}, extracting", tally_id);
+        println!("name = {name}");
+        if let Some(number) = name.strip_prefix("mesh_tally_") {
+            println!("number = {number}");
+            if let Ok(tally_id) = number.parse::<u32>() {
+                println!("Found fmesh {}, extracting", tally_id);
 
-    //             // * then if value in cli values
-    //             if cli.tallies.is_empty() || cli.tallies.contains(&tally_id) {
-    //                 println!(" - Extracting fmesh {tally_id}");
+                // * then if value in cli values
+                if cli.tallies.is_empty() || cli.tallies.contains(&tally_id) {
+                    println!(" - Extracting fmesh {tally_id}");
 
-    //                 let output_file = File::create(format!("fmesh_{tally_id}.h5"))?;
+                    let output_file = File::create(format!("fmesh_{tally_id}.h5"))?;
 
-    //                 let group_name = format!("/results/mesh_tally/{name}");
-    //                 let new_group = output_file.create_group(&group_name)?;
+                    let group_name = format!("/results/mesh_tally/{name}");
+                    let new_group = output_file.create_group(&group_name)?;
 
-    //                 let src_group = mesh_tally_group.group(&name)?;
+                    let src_group = mesh_tally_group.group(&name)?;
 
-    //                 for dataset_name in src_group.member_names()? {
-    //                     let src_dataset = src_group.dataset(&dataset_name)?;
+                    let builder = new_group.new_dataset_builder();
 
-    //                     // let builder = new_group
-    //                     //     .new_dataset_builder().external(name, offset, size)
-    //                     //     .with_data(src_dataset)
-    //                     //     .create("test")?;
-    //                 }
+                    for dataset in src_group.datasets()? {
+                        println!("  - dataset: {}", dataset.name())
+                        // builder.with_data(dataset.clone()).create("test")?;
+                    }
 
-    //                 // let dataset = group.datasets()?;
-    //                 // builder.with_data(dataset[0]).create("test")?;
+                    for attribute in src_group.attr_names()? {
+                        println!("  - attr   : {}", attribute)
+                        // builder.with_data(dataset.clone()).create("test")?;
+                    }
 
-    //                 // output_file
+                    for member in src_group.member_names()? {
+                        println!("  - member : {}", member)
+                    }
 
-    //                 // for dataset_name in group.member_names()? {
-    //                 //     let src_dataset = group.dataset(&dataset_name)?;
-    //                 //     src_dataset.copy(&new_group, &dataset_name)?;
-    //                 // }
-    //             } else {
-    //                 println!(" - Skipping fmesh {tally_id}");
-    //             }
-    //         }
-    //     }
-    // }
+                    // builder
+                    //     .with_data(src_group.attr("has_collision_binning")?)
+                    //     .create("test")?;
+
+                    // println!("{:?}", a)
+
+                    // let data = src_group.attr("comment_line_count")?;
+                    // let a = new_group
+                    //     .new_attr_builder()
+                    //     .with_data(data.as_writer())
+                    //     .create("test_data")?;
+
+                    // let dataset = group.datasets()?;
+                    // builder.with_data(dataset[0]).create("test")?;
+
+                    // output_file
+
+                    // for dataset_name in group.member_names()? {
+                    //     let src_dataset = group.dataset(&dataset_name)?;
+                    //     src_dataset.copy(&new_group, &dataset_name)?;
+                    // }
+                } else {
+                    println!(" - Skipping fmesh {tally_id}");
+                }
+            }
+        }
+    }
 
     // // Access "group_b"
     // let group_b = input_file.group("group_b")?;
