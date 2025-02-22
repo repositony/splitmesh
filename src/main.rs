@@ -74,25 +74,60 @@ fn main() -> Result<()> {
                     let output_file = File::create(format!("fmesh_{tally_id}.h5"))?;
 
                     let group_name = format!("/results/mesh_tally/{name}");
-                    let new_group = output_file.create_group(&group_name)?;
+                    let group = output_file.create_group(&group_name)?;
 
                     let src_group = mesh_tally_group.group(&name)?;
 
-                    let builder = new_group.new_dataset_builder();
-
-                    for dataset in src_group.datasets()? {
+                    for dataset in group.datasets()? {
                         println!("  - dataset: {}", dataset.name())
                         // builder.with_data(dataset.clone()).create("test")?;
                     }
 
-                    for attribute in src_group.attr_names()? {
+                    for attribute in group.attr_names()? {
                         println!("  - attr   : {}", attribute)
                         // builder.with_data(dataset.clone()).create("test")?;
                     }
 
-                    for member in src_group.member_names()? {
+                    for member in group.member_names()? {
                         println!("  - member : {}", member)
                     }
+
+                    // // Copy all objects from the original group to the new group
+                    // for obj in src_group.member_names()? {
+                    //     src_group.copy(&obj, &new_group)?;
+                    // }
+
+                    // for obj in src_group.member_names()? {
+                    //     let dataset = src_group.dataset(&obj)?;
+                    //     let data: Vec<u8> = dataset.read_raw()?;
+                    //     new_group
+                    //         .new_dataset_builder()
+                    //         .with_data(&data)
+                    //         .create(&*obj)?;
+                    // }
+
+                    // Copy datasets from the original group to the new group
+                    // for obj in group.member_names()? {
+                    //     let dataset = group.dataset(&obj)?;
+                    //     let dtype = dataset.dtype()?;
+                    //     match dtype.id_type()? {
+                    //         hdf5::types::TypeDescriptor::Integer { .. } => {
+                    //             let data: Vec<i32> = dataset.read()?;
+                    //             new_group
+                    //                 .new_dataset::<i32>()
+                    //                 .create(&obj, dataset.shape())?
+                    //                 .write(&data)?;
+                    //         }
+                    //         hdf5::types::TypeDescriptor::Float { .. } => {
+                    //             let data: Vec<f64> = dataset.read()?;
+                    //             new_group
+                    //                 .new_dataset::<f64>()
+                    //                 .create(&obj, dataset.shape())?
+                    //                 .write(&data)?;
+                    //         }
+                    //         _ => return Err("Unsupported data type".into()),
+                    //     }
+                    // }
 
                     // builder
                     //     .with_data(src_group.attr("has_collision_binning")?)
