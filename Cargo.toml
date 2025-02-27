@@ -7,8 +7,8 @@ license      = "GPL-3.0 license"
 name         = "splitmesh"
 readme       = "readme.md"
 repository   = "https://github.com/repositony/splitmesh"
-rust-version = "1.79"
-version      = "1.0.1"
+rust-version = "1.81"
+version      = "1.1.0"
 
 [dependencies]
 anyhow    = "1.0.94"
@@ -23,3 +23,8 @@ unsafe_code = "forbid"
 [[bin]]
 doc  = false
 name = "splitmesh"
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto      = "thin"

@@ -10,13 +10,13 @@ Arguments:
   <path>  Path to input meshtal file
 
 Options:
-  -v, --verbose...  Verbose logging (-v, -vv)
-  -q, --quiet       Supress all log output (overrules --verbose)
-  -h, --help        Print help (see more with '--help')
+  -v, --verbose...       Verbose logging (-v, -vv)
+  -q, --quiet            Supress all log output (overrules --verbose)
+  -h, --help             Print help (see more with '--help')
 
 Split options:
   -t, --tallies <id>...  List of tallies to extract
-  -o, --output <name>    Prefix for output files [default: fmesh]
+  -o, --output <name>    Prefix for output files
 
 Note: --help shows more information and examples
 ```
@@ -25,6 +25,11 @@ Help is printed with the `-h` flag, and `--help` will show examples, default
 values, examples, and any important behaviour.
 
 ## Install
+
+Download and unpack the latest release [here](https://github.com/repositony/splitmesh/releases/latest)
+
+<details>
+  <summary>Click here for manual install</summary><br />
 
 Direct from github:
 
@@ -43,7 +48,7 @@ installed from the [official website](https://www.rust-lang.org/tools/install)
 
 ### Unix (Linux/MacOS)
 
-Run the following to download and run `rustup-init.sh`, which will install 
+Run the following to download and run `rustup-init.sh`, which will install
 the Rust toolchain for your platform.
 
 ```shell
@@ -56,6 +61,8 @@ your environment with `source ~/.bashrc`.
 ### Windows
 
 On Windows, download and run `rustup-init.exe` from the [official installs](https://www.rust-lang.org/tools/install).
+
+</details>
 
 </details>
 
@@ -88,5 +95,3 @@ The name of the output files is appended with the tally number as
 # Change output file names to "mymesh_<id>.msht"
 splitmesh /path/to/file.msht --output mymesh
 ```
-
-
