@@ -1,5 +1,7 @@
 # Meshtal file splitter (`splitmesh`)
 
+[![GitHub release](https://img.shields.io/github/v/release/repositony/splitmesh?include_prereleases)](https://github.com/repositony/splitmesh/releases/latest)
+
 Command line tool to separate tallies into individual files for large MCNP
 meshtal outputs that contain multiple tallies.
 
